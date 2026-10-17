@@ -1,0 +1,9 @@
+{
+  "name":"MOLT: ZERO",
+  "short_name":"MOLT ZERO",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#070b09",
+  "theme_color":"#0b0f0d",
+  "icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#0b0f0d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>MOLT: ZERO</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="app">
+    <section id="menu" class="screen active">
+      <div class="brand">
+        <div class="logo-mark" aria-hidden="true"><span></span><i></i><b></b></div>
+        <div>
+          <div class="eyebrow">BIO-MUTATION RUNNER</div>
+          <h1>MOLT: ZERO</h1>
+          <p>Your body is the build. Every chamber rewrites it.</p>
+        </div>
+      </div>
+      <div class="menu-grid">
+        <div class="panel hero-panel">
+          <div class="specimen" id="menuSpecimen" aria-hidden="true"></div>
+          <div class="menu-actions">
+            <button id="newRunBtn" class="primary">BEGIN RUN</button>
+            <button id="continueBtn">CONTINUE</button>
+            <button id="codexBtn">GENOME CODEX</button>
+            <button id="settingsBtn">SETTINGS</button>
+          </div>
+        </div>
+        <div class="panel run-info">
+          <div class="stat-row"><span>Best Chamber</span><strong id="bestRoom">0</strong></div>
+          <div class="stat-row"><span>Mutations Discovered</span><strong id="mutationsFound">0 / 30</strong></div>
+          <div class="stat-row"><span>Predators Defeated</span><strong id="bossesDefeated">0 / 3</strong></div>
+          <div class="divider"></div>
+          <div class="small-title">STARTING SPECIMEN</div>
+          <div class="bug-tabs" role="tablist" aria-label="Starting insect">
+            <button class="bug-tab selected" data-bug="mantis">MANTIS</button>
+            <button class="bug-tab" data-bug="moth">MOTH</button>
+            <button class="bug-tab" data-bug="stag">STAG</button>
+          </div>
+          <p id="bugDescription" class="muted"></p>
+        </div>
+      </div>
+      <div class="footer-actions"><button id="ownerBtn" class="ghost">OWNER</button></div>
+    </section>
+
+    <section id="game" class="screen">
+      <div class="game-shell">
+        <div class="hud-top">
+          <div class="hud-block"><span>CHAMBER</span><strong id="hudRoom">1</strong></div>
+          <div class="hud-block objective"><span id="hudObjectiveType">OBJECTIVE</span><strong id="hudObjective">Reach the exit</strong></div>
+          <div class="hud-block right"><span>RUN CHITIN</span><strong id="hudChitin">0</strong></div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="gameCanvas" width="960" height="540" aria-label="MOLT ZERO game area"></canvas>
+          <div id="toast" role="status" aria-live="polite"></div>
+          <div id="mobileControls" class="mobile-controls" aria-label="Touch controls">
+            <div class="dpad">
+              <button data-key="ArrowUp" class="up" aria-label="Move up">▲</button>
+              <button data-key="ArrowLeft" class="left" aria-label="Move left">◀</button>
+              <button data-key="ArrowDown" class="down" aria-label="Move down">▼</button>
+              <button data-key="ArrowRight" class="right" aria-label="Move right">▶</button>
+            </div>
+            <div class="actions">
+              <button data-act="attack" class="attack">STRIKE</button>
+              <button data-act="dash">DASH</button>
+              <button data-act="special">MOLT</button>
+              <button data-act="interact">USE</button>
+            </div>
+          </div>
+        </div>
+        <div class="hud-bottom">
+          <div class="meter-shell hp"><div class="meter-label"><span>SHELL</span><strong id="hpText">100 / 100</strong></div><div class="meter"><i id="hpBar"></i></div></div>
+          <div class="meter-shell energy"><div class="meter-label"><span>MOLT CHARGE</span><strong id="energyText">0%</strong></div><div class="meter"><i id="energyBar"></i></div></div>
+          <div class="hud-controls"><button id="pauseBtn">PAUSE</button><button id="gameOwnerBtn">OWNER</button><button id="gameSettingsBtn">SETTINGS</button></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="mutation" class="screen overlay-screen">
+      <div class="overlay-card mutation-card">
+        <div class="eyebrow">BODY REWRITE AVAILABLE</div>
+        <h2>CHOOSE A MUTATION</h2>
+        <p class="muted">Mutations change your stats and your visible body for this run.</p>
+        <div id="mutationChoices" class="mutation-grid"></div>
+        <div class="mutation-tools">
+          <button id="rerollBtn">REROLL <span id="rerollCost">20</span> CHITIN</button>
+          <button id="repairBtn">REPAIR SHELL 30 CHITIN</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="pause" class="screen overlay-screen">
+      <div class="overlay-card narrow">
+        <div class="eyebrow">RUN SUSPENDED</div>
+        <h2>PAUSED</h2>
+        <button id="resumeBtn" class="primary">RESUME</button>
+        <button id="pauseSettingsBtn">SETTINGS</button>
+        <button id="abandonBtn">ABANDON RUN</button>
+      </div>
+    </section>
+
+    <section id="settings" class="screen overlay-screen">
+      <div class="overlay-card settings-card">
+        <div class="settings-head"><div><div class="eyebrow">SYSTEM</div><h2>SETTINGS</h2></div><button id="closeSettingsBtn">CLOSE</button></div>
+        <div class="setting"><label for="masterVol">MASTER VOLUME <span id="masterVal">100%</span></label><input id="masterVol" type="range" min="0" max="20000" step="25" value="100"></div>
+        <div class="setting"><label for="musicVol">MUSIC <span id="musicVal">100%</span></label><input id="musicVol" type="range" min="0" max="20000" step="25" value="100"></div>
+        <div class="setting"><label for="sfxVol">SFX <span id="sfxVal">100%</span></label><input id="sfxVol" type="range" min="0" max="20000" step="25" value="100"></div>
+        <label class="check"><input id="screenShake" type="checkbox" checked><span>SCREEN SHAKE</span></label>
+        <label class="check"><input id="reducedFlash" type="checkbox"><span>REDUCED FLASHES</span></label>
+        <div class="divider"></div>
+        <div class="data-actions"><button id="exportBtn">EXPORT SAVE</button><button id="importBtn">IMPORT SAVE</button><button id="resetBtn" class="danger">RESET DATA</button></div>
+        <textarea id="saveBox" spellcheck="false" placeholder="Exported save data appears here. Paste save data here before importing."></textarea>
+      </div>
+    </section>
+
+    <section id="codex" class="screen overlay-screen">
+      <div class="overlay-card codex-card">
+        <div class="settings-head"><div><div class="eyebrow">ARCHIVE</div><h2>GENOME CODEX</h2></div><button id="closeCodexBtn">CLOSE</button></div>
+        <div id="codexGrid" class="codex-grid"></div>
+      </div>
+    </section>
+
+    <section id="owner" class="screen overlay-screen">
+      <div class="overlay-card owner-card">
+        <div class="settings-head"><div><div class="eyebrow">RESTRICTED</div><h2>OWNER CONTROL</h2></div><button id="closeOwnerBtn">CLOSE</button></div>
+        <div id="ownerLock">
+          <label for="ownerCode">ACCESS CODE</label>
+          <input id="ownerCode" type="password" autocomplete="off" placeholder="Enter code">
+          <button id="unlockOwnerBtn" class="primary">UNLOCK</button>
+          <p id="ownerError" class="error"></p>
+        </div>
+        <div id="ownerTools" hidden>
+          <div class="owner-grid">
+            <button data-owner="god">TOGGLE GOD MODE</button>
+            <button data-owner="chitin">ADD 500 RUN CHITIN</button>
+            <button data-owner="complete">COMPLETE CHAMBER</button>
+            <button data-owner="mutation">GRANT RANDOM MUTATION</button>
+            <button data-owner="boss">SPAWN PREDATOR</button>
+            <button data-owner="unlock">UNLOCK CODEX</button>
+            <button data-owner="heal">FULL REPAIR</button>
+            <button data-owner="charge">MAX MOLT CHARGE</button>
+          </div>
+          <p id="ownerStatus" class="muted">Owner access active.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="gameover" class="screen overlay-screen">
+      <div class="overlay-card narrow result-card">
+        <div class="eyebrow" id="resultEyebrow">RUN TERMINATED</div>
+        <h2 id="resultTitle">SHELL FAILURE</h2>
+        <div class="result-grid"><div><span>CHAMBER</span><strong id="resultRoom">0</strong></div><div><span>MUTATIONS</span><strong id="resultMutations">0</strong></div><div><span>SCORE</span><strong id="resultScore">0</strong></div></div>
+        <button id="retryBtn" class="primary">NEW RUN</button>
+        <button id="menuBtn">RETURN TO MENU</button>
+      </div>
+    </section>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
